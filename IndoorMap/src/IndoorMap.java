@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class IndoorMap {
 
-    private List<Location> locations;
+    public List<Location> locations;
 
     public IndoorMap(String file) {
         this.locations = new LinkedList<>();

@@ -23,4 +23,8 @@ public class Location {
         this.directions.put(l, direction);
     }
 
+    public Map<Location, Integer> getAdjacentEdges() {
+        return this.weights;
+    }
+
 }
