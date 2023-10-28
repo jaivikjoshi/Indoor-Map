@@ -66,7 +66,7 @@ public class IndoorMap {
                 System.exit(0);
             }
             L1.addAdjacentLocation(L2, Integer.parseInt(info[2]), info[3]);
-            L2.addAdjacentLocation(L2, Integer.parseInt(info[2]),
+            L2.addAdjacentLocation(L1, Integer.parseInt(info[2]),
                     getOppositeDirection(info[3]));
 
             str = input.nextLine();
@@ -152,6 +152,12 @@ public class IndoorMap {
             System.out
                     .println("We don't have that store, please enter another.");
             finish = in.nextLine();
+        }
+
+        Path p = new Path(im.getLocation(start), im.getLocation(finish), im);
+        List<Location> path = p.buildPath();
+        for (int i = 0; i < path.size(); i++) {
+            System.out.println(path.get(i).name);
         }
 
         in.close();

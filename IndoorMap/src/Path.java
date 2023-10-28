@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ public class Path {
 
     int startIndex = 0;
     int finishIndex = 0;
+    private Map<Location, Location> predecessors;
     private Map<Location, Boolean> visited;
     private Map<Location, Integer> distance;
     static int MAX_VAL = Integer.MAX_VALUE;
@@ -47,6 +49,7 @@ public class Path {
 
     public Path(Location start, Location finish, IndoorMap im) {
         this.im = im;
+        this.predecessors = new HashMap<>();
         this.visited = new HashMap<>();
         this.distance = new HashMap<>();
         this.locations = im.locations;
@@ -60,6 +63,7 @@ public class Path {
             }
             if (this.locations.get(i).name.equals(finish.name)) {
                 this.finishIndex = i;
+                this.distance.put(this.locations.get(i), MAX_VAL);
             }
 
         }
@@ -67,11 +71,11 @@ public class Path {
     }
 
     //traverses the whole graph starting from 0 to update all the distances
-    public void buildPath() {
+    public List<Location> buildPath() {
         //PriorityQueue<Location> q = new PriorityQueue<>(); //min priority queue makes start and next easier
         //q.offer(locations.get(startIndex));
 
-        PriorityQueue<Pair> q = new PriorityQueue<>();
+        PriorityQueue<Pair> q = new PriorityQueue<>(new PairCompare());
 
         q.add(new Pair(this.locations.get(this.startIndex), 0));
 
@@ -79,7 +83,7 @@ public class Path {
             Pair p = q.poll(); //get start
             Location l = p.getLocation();
             int sourceWeight = p.getDistance(); //0 for start
-            int edgeWeight;
+
             Location key;
             this.visited.replace(l, true);
             for (Map.Entry<Location, Integer> entry : l.getAdjacentEdges()
@@ -88,16 +92,22 @@ public class Path {
                 key = entry.getKey();
 
                 if (!this.visited.get(key)) {
-                    edgeWeight = entry.getValue();
-                    if ((edgeWeight + sourceWeight) < this.distance.get(key)) {
-                        this.distance.replace(key, edgeWeight + sourceWeight); //weight + source distance
-                        q.add(p);
+                    int newDistance = entry.getValue() + sourceWeight;
+                    if (newDistance < this.distance.get(key)) {
+                        this.distance.replace(key, newDistance); //weight + source distance
+                        q.add(new Pair(key, newDistance));
+                        if (this.predecessors.containsKey(key)) {
+                            this.predecessors.replace(key, l);
+                        } else {
+                            this.predecessors.put(key, l);
+                        }
                     }
                 }
             }
 
         }
 
+        return this.createList();
         /*
          * for (int i = 0; i < locations.size(); i++) {
          *
@@ -106,6 +116,17 @@ public class Path {
 
         //for((Map.Entry<Location, Integer> entry : map.entrySet())
 
+    }
+
+    private List<Location> createList() {
+        List<Location> path = new ArrayList<>();
+        Location l = this.locations.get(this.finishIndex);
+        while (l != null) {
+            path.add(0, l);
+            l = this.predecessors.get(l);
+        }
+
+        return path;
     }
 
     public static void start() {
