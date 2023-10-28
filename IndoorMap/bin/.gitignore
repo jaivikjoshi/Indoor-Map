@@ -2,3 +2,5 @@
 /Location.class
 /Path.class
 /Direction.class
+/Path$Pair.class
+/Path$PairCompare.class
