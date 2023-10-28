@@ -16,7 +16,7 @@ public class IndoorMap {
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
             System.exit(0);
-            
+
         }
 
     }
@@ -123,12 +123,37 @@ public class IndoorMap {
         return L;
     }
 
+    public boolean hasLocation(String name) {
+        for (int i = 0; i < this.locations.size(); i++) {
+            if (this.locations.get(i).name.equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter a file");
         String file = in.nextLine();
-        System.out.println("Enter your starting point");
+
         IndoorMap im = new IndoorMap(file);
+        System.out.println("Enter your starting point");
+        String start = in.nextLine();
+        while (!im.hasLocation(start)) {
+            System.out
+                    .println("We don't have that store, please enter another.");
+            start = in.nextLine();
+        }
+        System.out.println("Enter your ending point");
+
+        String finish = in.nextLine();
+        while (!im.hasLocation(finish)) {
+            System.out
+                    .println("We don't have that store, please enter another.");
+            finish = in.nextLine();
+        }
+
         in.close();
     }
 }
