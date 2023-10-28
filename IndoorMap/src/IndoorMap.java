@@ -16,6 +16,7 @@ public class IndoorMap {
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
             System.exit(0);
+            
         }
 
     }
