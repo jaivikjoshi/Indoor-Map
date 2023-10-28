@@ -126,7 +126,7 @@ public class IndoorMap {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter a file");
         String file = in.nextLine();
-
+        System.out.println("Enter your starting point");
         IndoorMap im = new IndoorMap(file);
         in.close();
     }
