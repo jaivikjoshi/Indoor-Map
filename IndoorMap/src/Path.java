@@ -9,10 +9,11 @@ public class Path {
     private Map<Location, Integer> distance;
     static int MAX_VAL = Integer.MAX_VALUE;
     public List<Location> locations;
-    
+    IndoorMap im;
     
     public Path(Location start, Location finish, IndoorMap im)
     {
+    	this.im = im;
     	this.locations = im.locations;
      	for (int i = 0; i < this.locations.size(); i++)
      	{
@@ -38,21 +39,26 @@ public class Path {
     	//PriorityQueue<Location> q = new PriorityQueue<>(); //min priority queue makes start and next easier
     	//q.offer(locations.get(startIndex));
     	
-    	while(visited.containsValue(false))
+    	Queue<Location> q = new LinkedList<>();
+    	
+    	q.offer(locations.get(startIndex));
+    	
+    	while(!q.isEmpty())
     	{
-    		 int weight;
+    		 Location l = q.poll(); //get start
+    		 int sourceWeight = distance.get(l); //0 for start
+    		 int edgeWeight;
     		 Location key;
-    		 
-    		 Location l = locations.get(startIndex); //get start
     		 for(Map.Entry<Location, Integer> entry : l.getAdjacentEdges().entrySet()) //traverse neighbours
     		 {
     			 key = entry.getKey();
-    			 weight = entry.getValue();
-    			 if(weight < distance.getValue(key))
+    			 edgeWeight = entry.getValue();
+    			 if(edgeWeight < distance.get(key))
     			 {
-    				 
+    				 distance.replace(key, edgeWeight + sourceWeight); //weight + source distance
     			 }
-    			 
+    			 if(visited.get(key) == false)
+    			 q.offer(im.getLocation(key.name));
     		 }
     		 
     	}
