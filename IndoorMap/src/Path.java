@@ -89,7 +89,7 @@ public class Path {
 
                 if (!this.visited.get(key)) {
                     edgeWeight = entry.getValue();
-                    if (edgeWeight < this.distance.get(key)) {
+                    if ((edgeWeight + sourceWeight) < this.distance.get(key)) {
                         this.distance.replace(key, edgeWeight + sourceWeight); //weight + source distance
                         q.add(p);
                     }
