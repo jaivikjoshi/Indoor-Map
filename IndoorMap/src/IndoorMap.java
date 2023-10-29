@@ -13,6 +13,7 @@ public class IndoorMap {
         try {
             Scanner fileIn = new Scanner(new File(file));
             this.initializeMap(fileIn);
+            fileIn.close();
         } catch (FileNotFoundException e) {
             System.err.println("File not found");
             System.exit(0);
@@ -153,8 +154,20 @@ public class IndoorMap {
                     .println("We don't have that store, please enter another.");
             finish = in.nextLine();
         }
+        if (im.getLocation(start).level != im.getLocation(finish).level) {
+            System.out.println("This route requires moving up/down levels.");
+            System.out.println("Do you require the elevator(yes/no)");
+            if (in.nextLine().equals("yes")) {
+                for (Location l : im.locations) {
+                    if (l.isEscalator) {
+                        l.changeWeights(100000);
+                    }
+                }
+            }
+        }
 
         Path p = new Path(im.getLocation(start), im.getLocation(finish), im);
+
         List<Location> path = p.buildPath();
         for (int i = 0; i < path.size(); i++) {
             System.out.println(path.get(i).name);

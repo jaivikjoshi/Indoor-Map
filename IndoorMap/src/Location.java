@@ -27,4 +27,10 @@ public class Location {
         return this.weights;
     }
 
+    public void changeWeights(int x) {
+        for (Location l : this.weights.keySet()) {
+            this.weights.replace(l, x);
+        }
+    }
+
 }
